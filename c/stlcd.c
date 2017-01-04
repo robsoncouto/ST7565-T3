@@ -161,49 +161,24 @@ int main(void) {
 void loop(void) {}
 
 void setup(void) {
-
-    //Serial.begin(9600);
-  //uart_init(BRRL_192);
-
     // turn on backlight
     BLA_DDR |= _BV(BLA);
     BLA_PORT |= _BV(BLA);
 
     LED_DDR |= _BV(LED);
-    // Serial.println("init");
-    //putstring_nl("init!");
-
-    st7565_init();
-
-
-    /*
-    while (1) {
-      spiwrite(0x55);
-      _delay_ms(100);
-    }
-    */
-
-    //Serial.println("on");
-    //putstring_nl("on");
-    st7565_command(CMD_DISPLAY_ON);
-    //Serial.println("normal");
-    //putstring_nl("normal");
-    st7565_command(CMD_SET_ALLPTS_NORMAL);
-    //Serial.println("bright");
-    ////putstring_nl("bright");
-    st7565_set_brightness(0x05);
-    //Serial.println("clear");
-    //putstring_nl("clear");
-    clear_screen();
-    //Serial.println("blit");
-    //putstring_nl("blit");
-
-    write_buffer(buffer);
-    //putstring_nl("done");
-    _delay_ms(250);
-    clear_buffer(buffer);
 
     LED_PORT |= _BV(LED);
+    st7565_init();
+
+    st7565_command(CMD_DISPLAY_ON);
+    st7565_command(CMD_SET_ALLPTS_NORMAL);
+    st7565_set_brightness(0x05);
+    clear_screen();
+
+
+    write_buffer(buffer);
+    _delay_ms(250);
+    clear_buffer(buffer);
 
     drawrect(buffer, 10, 10, 2, 2, 1);
     write_buffer(buffer);
@@ -242,10 +217,13 @@ void setup(void) {
 
     drawstring(buffer, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
     write_buffer(buffer);
-    _delay_ms(2500);
+    //  _delay_ms(2500);
     //clear_buffer(buffer);
 
     //testdrawbitmap(buffer, logo16_glcd_bmp, 16, 16);
+    //write_buffer(buffer);
+    //_delay_ms(2500);
+    //clear_buffer(buffer);
 
     //LED_PORT &= ~_BV(LED);
     //write_buffer(buffer);
@@ -340,16 +318,8 @@ void clear_screen(void) {
   uint8_t p, c;
 
   for(p = 0; p < 8; p++) {
-    /*
-      //putstring("new page! ");
-      uart_//putw_dec(p);
-      //putstring_nl("");
-    */
-
     st7565_command(CMD_SET_PAGE | p);
     for(c = 0; c < 129; c++) {
-      //uart_//putw_dec(c);
-      //uart_//putchar(' ');
       st7565_command(CMD_SET_COLUMN_LOWER | (c & 0xf));
       st7565_command(CMD_SET_COLUMN_UPPER | ((c >> 4) & 0xf));
       st7565_data(0x0);
@@ -415,69 +385,8 @@ inline void spiwrite(uint8_t c) {
       SID_PORT &= ~_BV(SID);
     SCLK_PORT |= _BV(SCLK);
   }
-
-  /*
-  // loop unwrapped! too fast doesnt work :(
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(7))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(6))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(5))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(4))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(3))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(2))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(1))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-
-  SCLK_PORT &= ~_BV(SCLK);
-  if (c & _BV(0))
-    SID_PORT |= _BV(SID);
-  else
-    SID_PORT &= ~_BV(SID);
-  SCLK_PORT |= _BV(SCLK);
-*/
-
 }
+
 void st7565_command(uint8_t c) {
   A0_PORT &= ~_BV(A0);
 
@@ -499,23 +408,13 @@ void write_buffer(uint8_t *buffer) {
   uint8_t c, p;
 
   for(p = 0; p < 8; p++) {
-    /*
-      //putstring("new page! ");
-      uart_//putw_dec(p);
-      //putstring_nl("");
-    */
 
     st7565_command(CMD_SET_PAGE | p);
     st7565_command(CMD_SET_COLUMN_LOWER | 0);
     st7565_command(CMD_SET_COLUMN_UPPER | 0);
     st7565_command(CMD_RMW);
 
-    //st7565_data(0x80);
-    //continue;
-
     for(c = 0; c < 128; c++) {
-      //uart_//putw_dec(c);
-      //uart_//putchar(' ');
       st7565_data(reverse(buffer[(128*p)+c]));
     }
   }
