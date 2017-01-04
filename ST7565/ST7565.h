@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define CMD_SET_ALLPTS_NORMAL 0xA4
 #define CMD_SET_ALLPTS_ON  0xA5
-#define CMD_SET_BIAS_9 0xA2 
+#define CMD_SET_BIAS_9 0xA2
 #define CMD_SET_BIAS_7 0xA3
 
 #define CMD_RMW  0xE0
@@ -85,6 +85,7 @@ class ST7565 {
   void begin(uint8_t contrast);
   void st7565_command(uint8_t c);
   void st7565_data(uint8_t c);
+  uint8_t reverse(uint8_t data);
   void st7565_set_brightness(uint8_t val);
   void clear_display(void);
   void clear();
@@ -92,21 +93,21 @@ class ST7565 {
 
   void setpixel(uint8_t x, uint8_t y, uint8_t color);
   uint8_t getpixel(uint8_t x, uint8_t y);
-  void fillcircle(uint8_t x0, uint8_t y0, uint8_t r, 
+  void fillcircle(uint8_t x0, uint8_t y0, uint8_t r,
 		  uint8_t color);
-  void drawcircle(uint8_t x0, uint8_t y0, uint8_t r, 
+  void drawcircle(uint8_t x0, uint8_t y0, uint8_t r,
 		  uint8_t color);
-  void drawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+  void drawrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
 		uint8_t color);
-  void fillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+  void fillrect(uint8_t x, uint8_t y, uint8_t w, uint8_t h,
 		uint8_t color);
-  void drawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, 
+  void drawline(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
 		uint8_t color);
   void drawchar(uint8_t x, uint8_t line, char c);
   void drawstring(uint8_t x, uint8_t line, char *c);
   void drawstring_P(uint8_t x, uint8_t line, const char *c);
 
-  void drawbitmap(uint8_t x, uint8_t y, 
+  void drawbitmap(uint8_t x, uint8_t y,
 		  const uint8_t *bitmap, uint8_t w, uint8_t h,
 		  uint8_t color);
 
@@ -116,5 +117,5 @@ class ST7565 {
 
   void my_setpixel(uint8_t x, uint8_t y, uint8_t color);
 
-  //uint8_t buffer[128*64/8]; 
+  //uint8_t buffer[128*64/8];
 };
