@@ -3,14 +3,14 @@
 int ledPin =  13;    // LED connected to digital pin 13
 
 // the LCD backlight is connected up to a pin so you can turn it on & off
-#define BACKLIGHT_LED 4
+#define BACKLIGHT_LED 19 //arduino A5 avr PC5
 
-// pin 9 - Serial data out (SID)
-// pin 8 - Serial clock out (SCLK)
-// pin 7 - Data/Command select (RS or A0)
-// pin 6 - LCD reset (RST)
-// pin 5 - LCD chip select (CS)
-ST7565 glcd(9, 8, 7, 6, 5);
+// pin 1 - Serial data out (SID)                  avr PD1
+// pin 2 - Serial clock out (SCLK)                avr PD2
+// pin 3 - Data/Command select (RS or A0)         avr PD3
+// pin 4 - LCD reset (RST)                        avr PD4
+// pin 5 - LCD chip select (CS)                   avr PD5
+ST7565 glcd(1, 2, 3, 4, 5);
 
 #define LOGO16_GLCD_HEIGHT 16 
 #define LOGO16_GLCD_WIDTH  16 
@@ -22,18 +22,20 @@ const static unsigned char __attribute__ ((progmem)) logo16_glcd_bmp[]={
 
 // The setup() method runs once, when the sketch starts
 void setup()   {                
-  Serial.begin(9600);
+  //Serial.begin(9600);
 
 #ifdef __AVR__
-  Serial.print(freeRam());
+  //Serial.print(freeRam());
 #endif
 
   // turn on backlight
   pinMode(BACKLIGHT_LED, OUTPUT);
-  digitalWrite(BACKLIGHT_LED, LOW);
+  digitalWrite(BACKLIGHT_LED, HIGH);
+  pinMode(6, OUTPUT);
+  digitalWrite(6, HIGH);
 
-  // initialize and set the contrast to 0x18
-  glcd.begin(0x18);
+  // initialize and set the contrast to 0x05
+  glcd.begin(0x05);
 
   glcd.display(); // show splashscreen
   delay(2000);
