@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <avr/io.h>
 #include <stdlib.h>
-#include <avr/pgmspace.h> 
+#include <avr/pgmspace.h>
 #include "glcd.h"
 
-extern uint8_t PROGMEM font[];
+extern uint8_t const PROGMEM font[];
 
 // the most basic function, set a single pixel
 void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
@@ -33,13 +33,13 @@ void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
     return;
 
   // x is which column
-  if (color) 
-    buff[x+ (y/8)*128] |= _BV(7-(y%8));  
+  if (color)
+    buff[x+ (y/8)*128] |= _BV(7-(y%8));
   else
-    buff[x+ (y/8)*128] &= ~_BV(7-(y%8)); 
+    buff[x+ (y/8)*128] &= ~_BV(7-(y%8));
 }
 
-void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y, 
+void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
 		const uint8_t bitmap, uint8_t w, uint8_t h,
 		uint8_t color) {
   for (uint8_t j=0; j<h; j++) {
@@ -84,7 +84,7 @@ void clearpixel(uint8_t *buff, uint8_t x, uint8_t y) {
 
 // bresenham's algorithm - thx wikpedia
 void drawline(uint8_t *buff,
-	      uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, 
+	      uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
 	      uint8_t color) {
 
   uint8_t steep = abs(y1 - y0) > abs(x1 - x0);
@@ -126,7 +126,7 @@ void drawline(uint8_t *buff,
 
 // filled rectangle
 void fillrect(uint8_t *buff,
-	      uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+	      uint8_t x, uint8_t y, uint8_t w, uint8_t h,
 	      uint8_t color) {
 
   // stupidest version - just pixels - but fast with internal buffer!
@@ -140,7 +140,7 @@ void fillrect(uint8_t *buff,
 
 // draw a rectangle
 void drawrect(uint8_t *buff,
-	      uint8_t x, uint8_t y, uint8_t w, uint8_t h, 
+	      uint8_t x, uint8_t y, uint8_t w, uint8_t h,
 	      uint8_t color) {
   // stupidest version - just pixels - but fast with internal buffer!
   for (uint8_t i=x; i<x+w; i++) {
@@ -150,13 +150,13 @@ void drawrect(uint8_t *buff,
   for (uint8_t i=y; i<y+h; i++) {
     setpixel(buff, x, i, color);
     setpixel(buff, x+w-1, i, color);
-  } 
+  }
 }
 
 
 // draw a circle
 void drawcircle(uint8_t *buff,
-	      uint8_t x0, uint8_t y0, uint8_t r, 
+	      uint8_t x0, uint8_t y0, uint8_t r,
 	      uint8_t color) {
   int8_t f = 1 - r;
   int8_t ddF_x = 1;
@@ -178,24 +178,24 @@ void drawcircle(uint8_t *buff,
     x++;
     ddF_x += 2;
     f += ddF_x;
-  
+
     setpixel(buff, x0 + x, y0 + y, color);
     setpixel(buff, x0 - x, y0 + y, color);
     setpixel(buff, x0 + x, y0 - y, color);
     setpixel(buff, x0 - x, y0 - y, color);
-    
+
     setpixel(buff, x0 + y, y0 + x, color);
     setpixel(buff, x0 - y, y0 + x, color);
     setpixel(buff, x0 + y, y0 - x, color);
     setpixel(buff, x0 - y, y0 - x, color);
-    
+
   }
 }
 
 
 // draw a circle
 void fillcircle(uint8_t *buff,
-	      uint8_t x0, uint8_t y0, uint8_t r, 
+	      uint8_t x0, uint8_t y0, uint8_t r,
 	      uint8_t color) {
   int8_t f = 1 - r;
   int8_t ddF_x = 1;
@@ -216,15 +216,15 @@ void fillcircle(uint8_t *buff,
     x++;
     ddF_x += 2;
     f += ddF_x;
-  
+
     for (uint8_t i=y0-y; i<=y0+y; i++) {
       setpixel(buff, x0+x, i, color);
       setpixel(buff, x0-x, i, color);
-    } 
+    }
     for (uint8_t i=y0-x; i<=y0+x; i++) {
       setpixel(buff, x0+y, i, color);
       setpixel(buff, x0-y, i, color);
-    }    
+    }
   }
 }
 
