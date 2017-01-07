@@ -15,7 +15,7 @@ OPT = s
 
 # List C source files here. (C dependencies are automatically generated.)
 
-SRC = stlcd.c util.c glcd.c glcdfont.c
+SRC = $(TARGET).c util.c glcd.c glcdfont.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s
