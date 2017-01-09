@@ -40,7 +40,7 @@ EXTRAINCDIRS =
 #  -Wa,...:   tell GCC to pass this to the assembler.
 #    -ahlms:  create assembler listing
 CFLAGS = -g -O$(OPT) \
--funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
+-funsigned-char -funsigned-bitfields -fpack-struct -fdiagnostics-color -fshort-enums \
 -Wall -Wstrict-prototypes \
 -DF_CPU=$(F_CPU) \
 -Wa,-adhlns=$(<:.c=.lst) \
