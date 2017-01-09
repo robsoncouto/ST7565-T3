@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <avr/io.h>
 #include <stdlib.h>
+#include <string.h>
 #include <avr/pgmspace.h>
 #include "glcd.h"
 
@@ -77,7 +78,7 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
 //
 // }
 
-void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
+void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
   while (c[0] != 0) {
     //uart_putchar(c[0]);
     drawchar(buff, x, line, c[0]);
