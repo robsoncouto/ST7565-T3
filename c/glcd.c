@@ -79,7 +79,7 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
   while (c[0] != 0) {
-    uart_putchar(c[0]);
+    //uart_putchar(c[0]);
     drawchar(buff, x, line, c[0]);
     c++;
     x += 6; // 6 pixels wide
