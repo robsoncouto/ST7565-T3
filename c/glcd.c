@@ -34,9 +34,9 @@ void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
 
   // x is which column
   if (color)
-    buff[x+ (y/8)*128] |= _BV(7-(y%8));
+    buff[x+ (y/8)*128] |= _BV(y%8);
   else
-    buff[x+ (y/8)*128] &= ~_BV(7-(y%8));
+    buff[x+ (y/8)*128] &= ~_BV(y%8);
 }
 
 void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
@@ -49,9 +49,33 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
       }
     }
   }
-
-
 }
+
+// void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y, const uint8_t bitmap, uint8_t w, uint8_t h,
+// uint8_t color) {
+//   uint8_t shift=y%8;
+//   if(shift==0){
+//     //copy directly
+//     for (uint8_t j=0; j<(h/8); j++) {
+//     for (uint8_t i=0; i<w; i++ ) {
+//       //if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
+//       //   setpixel(buff, x+i, y+j, color);
+//       //}
+//       buffer[i + 128*j]=pgm_read_byte(bitmap + i + (j/8)*w);
+//       }
+//     }
+//   }else{
+//     //copy with shift
+//     for (uint8_t j=0; j<(h/8); j++) {
+//     for (uint8_t i=0; i<w; i++ ) {
+//           if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
+//   	         setpixel(buff, x+i, y+j, color);
+//            }
+//       }
+//     }
+//   }
+//
+// }
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
   while (c[0] != 0) {
