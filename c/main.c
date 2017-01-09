@@ -80,6 +80,12 @@ uint8_t buffer[128*64/8] = {
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
 
 };
+
+const static unsigned char __attribute__ ((progmem)) logo16_glcd_bmp[]={
+0x30, 0xf0, 0xf0, 0xf0, 0xf0, 0x30, 0xf8, 0xbe, 0x9f, 0xff, 0xf8, 0xc0, 0xc0, 0xc0, 0x80, 0x00,
+0x20, 0x3c, 0x3f, 0x3f, 0x1f, 0x19, 0x1f, 0x7b, 0xfb, 0xfe, 0xfe, 0x07, 0x07, 0x07, 0x03, 0x00, };
+
+
 int main(void) {
   setup();
   while (1) {
@@ -108,7 +114,7 @@ void setup(void) {
     _delay_ms(250);
     clear_buffer(buffer);
 
-    drawrect(buffer, 10, 10, 2, 2, 1);
+    drawrect(buffer, 10, 10, 20, 20, 1);
     write_buffer(buffer);
     _delay_ms(2500);
     clear_buffer(buffer);
@@ -145,5 +151,9 @@ void setup(void) {
 
     drawstring(buffer, 0, 0, "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
     write_buffer(buffer);
+    _delay_ms(2500);
+    clear_buffer(buffer);
+
+    testdrawbitmap(buffer, logo16_glcd_bmp, 16, 16);
     //LED_PORT &= ~_BV(LED);
 }
