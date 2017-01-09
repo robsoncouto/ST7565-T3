@@ -40,7 +40,7 @@ void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
 }
 
 void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
-		const uint8_t bitmap, uint8_t w, uint8_t h,
+		const uint8_t *bitmap, uint8_t w, uint8_t h,
 		uint8_t color) {
   for (uint8_t j=0; j<h; j++) {
     for (uint8_t i=0; i<w; i++ ) {
