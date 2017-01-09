@@ -143,13 +143,7 @@ uint8_t buffer[128*64/8] = {
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
 
 };
-uint8_t reverse(uint8_t data){
-  uint8_t reversed = data;
-  reversed=((reversed&0xAA)>>1) | ((reversed&0x55)<<1);
-  reversed=((reversed&0xCC)>>2) | ((reversed&0x33)<<2);
-  reversed=((reversed&0xF0)>>4) | ((reversed&0x0F)<<4);
-  return reversed;
-}
+
 
 int main(void) {
   setup();
@@ -406,7 +400,7 @@ void write_buffer(uint8_t *buffer) {
     st7565_command(CMD_RMW);
 
     for(c = 0; c < 128; c++) {
-      st7565_data(reverse(buffer[(128*p)+c]));
+      st7565_data(buffer[(128*p)+c]);
     }
   }
 }
