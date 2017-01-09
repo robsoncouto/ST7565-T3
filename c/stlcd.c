@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "stlcd.h"
 #include "glcd.h"
 //#include "util.h"
-#include "logo_glcd.h"
+//#include "logo_glcd.h"
 
 
 
@@ -56,14 +56,14 @@ void testdrawbitmap(uint8_t *buff, const uint8_t *bitmap, uint8_t w, uint8_t h) 
   while (1) {
     // draw each icon
     for (uint8_t f=0; f< NUMFLAKES; f++) {
-      drawbitmap(buff, icons[f][XPOS], icons[f][YPOS], logo16_glcd_bmp, w, h, 1);
+      drawbitmap(buff, icons[f][XPOS], icons[f][YPOS], bitmap, w, h, 1);
     }
     write_buffer(buff);
     _delay_ms(200);
 
     // then erase it + move it
     for (uint8_t f=0; f< NUMFLAKES; f++) {
-      drawbitmap(buff, icons[f][XPOS], icons[f][YPOS],  logo16_glcd_bmp, w, h, 0);
+      drawbitmap(buff, icons[f][XPOS], icons[f][YPOS], bitmap, w, h, 0);
       // move it
       icons[f][YPOS] += icons[f][DELTAY];
       // if its gone, reinit
