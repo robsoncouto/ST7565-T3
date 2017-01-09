@@ -6,7 +6,7 @@ F_CPU = 8000000
 FORMAT = ihex
 
 # Target file name (without extension).
-TARGET = stlcd
+TARGET = main
 
 # Optimization level, can be [0, 1, 2, 3, s]. 0 turns off optimization.
 # (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
@@ -15,7 +15,7 @@ OPT = s
 
 # List C source files here. (C dependencies are automatically generated.)
 
-SRC = $(TARGET).c glcd.c glcdfont.c
+SRC = $(TARGET).c stlcd.c glcd.c glcdfont.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s
