@@ -1,6 +1,6 @@
 # MCU name
 MCU = atmega328p
-F_CPU = 16000000
+F_CPU = 8000000
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -15,7 +15,7 @@ OPT = s
 
 # List C source files here. (C dependencies are automatically generated.)
 
-SRC = $(TARGET).c util.c glcd.c glcdfont.c
+SRC = $(TARGET).c glcd.c glcdfont.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s

@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stdlib.h>
 #include "stlcd.h"
 #include "glcd.h"
-#include "util.h"
+//#include "util.h"
 #include "logo_glcd.h"
 
 
