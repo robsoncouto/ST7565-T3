@@ -92,10 +92,17 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, uint8_t *c) {
   }
 
 }
+uint8_t reverse(uint8_t data){
+  uint8_t reversed = data;
+  reversed=((reversed&0xAA)>>1) | ((reversed&0x55)<<1);
+  reversed=((reversed&0xCC)>>2) | ((reversed&0x33)<<2);
+  reversed=((reversed&0xF0)>>4) | ((reversed&0x0F)<<4);
+  return reversed;
+}
 
 void drawchar(uint8_t *buff, uint8_t x, uint8_t line, uint8_t c) {
   for (uint8_t i =0; i<5; i++ ) {
-    buff[x + (line*128) ] = pgm_read_byte(font+(c*5)+i);
+    buff[x + (line*128) ] = reverse(pgm_read_byte(font+(c*5)+i));
     x++;
   }
 }
