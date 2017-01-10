@@ -40,13 +40,23 @@ void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
     buff[x+ (y/8)*128] &= ~_BV(y%8);
 }
 
-void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,
-		const uint8_t *bitmap, uint8_t w, uint8_t h,
-		uint8_t color) {
-  for (uint8_t j=0; j<h; j++) {
-    for (uint8_t i=0; i<w; i++ ) {
-      if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
-	setpixel(buff, x+i, y+j, color);
+void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
+  if((y%8)==0){
+    for (uint8_t j=0; j<(h/8); j++) {
+      for (uint8_t i=0; i<w; i++ ) {
+        if(color){
+          buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
+        }else{
+          buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
+        }
+      }
+    }
+  }else{
+    for (uint8_t j=0; j<h; j++) {
+      for (uint8_t i=0; i<w; i++ ) {
+        if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
+  	       setpixel(buff, x+i, y+j, color);
+        }
       }
     }
   }
