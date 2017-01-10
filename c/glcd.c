@@ -27,17 +27,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "glcd.h"
 
 extern uint8_t const PROGMEM font[];
+uint8_t pages[8];
+uint8_t* getPages(void){
+  return pages;
+}
+void clearPages(void){
+  memset(pages,0,8);
+}
 
 // the most basic function, set a single pixel
 void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
   if ((x >= LCDWIDTH) || (y >= LCDHEIGHT))
     return;
-
   // x is which column
-  if (color)
+  if (color){
     buff[x+ (y/8)*128] |= _BV(y%8);
-  else
+    pages[y/8]=1;
+  }else{
     buff[x+ (y/8)*128] &= ~_BV(y%8);
+    pages[y/8]=1;
+  }
 }
 
 void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
@@ -46,8 +55,10 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if(color){
           buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
+          pages[y/8]=1;
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
+          pages[y/8]=1;
         }
       }
     }
