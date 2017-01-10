@@ -222,4 +222,5 @@ void write_buffer(uint8_t *buffer) {
       }
     }
   }
+  clearPages();
 }
