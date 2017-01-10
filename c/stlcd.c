@@ -31,12 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //#include "logo_glcd.h"
 
 
-
-uint8_t is_reversed = 1;
-
-int pagemap[] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-
-
 #define NUMFLAKES 10
 #define XPOS 0
 #define YPOS 1
