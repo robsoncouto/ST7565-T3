@@ -98,4 +98,5 @@ void testdrawcircle(uint8_t *buff);
 void testdrawline(uint8_t *buff);
 void testdrawrect(uint8_t *buff);
 void testfillrect(uint8_t *buff);
+void write_part(uint8_t *buffer,uint8_t x, uint8_t y, uint8_t w,uint8_t h);
 void clear_screen(void);
