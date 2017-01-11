@@ -67,6 +67,7 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
   	       setpixel(buff, x+i, y+j, color);
+           pages[y/8]=1;
         }
       }
     }
@@ -100,6 +101,7 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
 // }
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
+  pages[line]=1;
   while (c[0] != 0) {
     //uart_putchar(c[0]);
     drawchar(buff, x, line, c[0]);
@@ -108,6 +110,7 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
     if (x + 6 >= LCDWIDTH) {
       x = 0;    // ran out of this line
       line++;
+      pages[line]=1;
     }
     if (line >= (LCDHEIGHT/8))
       return;        // ran out of space :(
