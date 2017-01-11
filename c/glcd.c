@@ -55,10 +55,10 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if(color){
           buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
-          pages[y/8]=1;
+          pages[j/8]=1;
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
-          pages[y/8]=1;
+          pages[j/8]=1;
         }
       }
     }
@@ -67,7 +67,7 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
   	       setpixel(buff, x+i, y+j, color);
-           pages[y/8]=1;
+           pages[j/8]=1;
         }
       }
     }
