@@ -89,31 +89,41 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
   }
 }
 
-// void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y, const uint8_t bitmap, uint8_t w, uint8_t h,
-// uint8_t color) {
-//   uint8_t shift=y%8;
-//   if(shift==0){
-//     //copy directly
-//     for (uint8_t j=0; j<(h/8); j++) {
-//     for (uint8_t i=0; i<w; i++ ) {
-//       //if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
-//       //   setpixel(buff, x+i, y+j, color);
-//       //}
-//       buffer[i + 128*j]=pgm_read_byte(bitmap + i + (j/8)*w);
-//       }
-//     }
-//   }else{
-//     //copy with shift
-//     for (uint8_t j=0; j<(h/8); j++) {
-//     for (uint8_t i=0; i<w; i++ ) {
-//           if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
-//   	         setpixel(buff, x+i, y+j, color);
-//            }
-//       }
-//     }
-//   }
-//
-// }
+void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
+  if((y%8)==0){
+    for (uint8_t j=0; j<(h/8); j++) {
+      for (uint8_t i=0; i<w; i++ ) {
+        if(color){
+          buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
+#ifdef CHECK_PAGES
+          pages[j+(y/8)]=1;
+#endif
+        }else{
+          buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
+#ifdef CHECK_PAGES
+          pages[j+(y/8)]=1;
+#endif
+        }
+      }
+    }
+  }else{
+    uint8_t shift=y%8;
+    for (uint8_t j=0; j<(h/8); j++) {
+      for (uint8_t i=0; i<w; i++ ) {
+        if(color){
+          buff[(x+i)+((j+(y/8))*128)]|=(pgm_read_byte(bitmap + i + (j)*w)<<shift);
+          buff[(x+i)+((j+1+(y/8))*128)]|=(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
+        }else{
+          buff[(x+i)+((j+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)<<shift);
+          buff[(x+i)+((j+1+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
+#ifdef CHECK_PAGES
+           pages[j/8]=1;
+#endif
+        }
+      }
+    }
+  }
+}
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
 #ifdef CHECK_PAGES
@@ -310,5 +320,5 @@ void clear_buffer(uint8_t *buff) {
   #ifdef CHECK_PAGES
   memset(pages,0,8);
   #endif
-  
+
 }
