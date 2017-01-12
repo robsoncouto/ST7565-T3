@@ -208,10 +208,13 @@ void st7565_set_brightness(uint8_t val) {
 
 void write_buffer(uint8_t *buffer) {
   uint8_t c, p;
+  #ifdef CHECK_PAGES
   uint8_t *pages =getPages();
-
+  #endif
   for(p = 0; p < 8; p++) {
+    #ifdef CHECK_PAGES
     if(pages[p]){
+    #endif
       st7565_command(CMD_SET_PAGE | p);
       st7565_command(CMD_SET_COLUMN_LOWER | 0);
       st7565_command(CMD_SET_COLUMN_UPPER | 0);
@@ -220,9 +223,13 @@ void write_buffer(uint8_t *buffer) {
       for(c = 0; c < 128; c++) {
         st7565_data(buffer[(128*p)+c]);
       }
+    #ifdef CHECK_PAGES
     }
+    #endif
   }
+  #ifdef CHECK_PAGES
   clearPages();
+  #endif
 }
 void write_part(uint8_t *buffer,uint8_t x, uint8_t y, uint8_t w,uint8_t h) {
   uint8_t c, p;
@@ -241,5 +248,4 @@ void write_part(uint8_t *buffer,uint8_t x, uint8_t y, uint8_t w,uint8_t h) {
       }
     }
   }
-  clearPages();
 }
