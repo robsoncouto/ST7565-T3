@@ -89,12 +89,16 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
   }
 }
 
-void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
+uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
+  uint8_t new_byte,status=0,prev_byte;
   if((y%8)==0){
     for (uint8_t j=0; j<(h/8); j++) {
       for (uint8_t i=0; i<w; i++ ) {
         if(color){
-          buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
+          new_byte=pgm_read_byte(bitmap + i + (j)*w);
+          prev_byte=buff[(x+i)+((j+(y/8))*128)];
+          status=status|(new_byte&prev_byte);
+          buff[(x+i)+((j+(y/8))*128)]=prev_byte|new_byte;
 #ifdef CHECK_PAGES
           pages[j+(y/8)]=1;
 #endif
@@ -111,8 +115,15 @@ void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, ui
     for (uint8_t j=0; j<(h/8); j++) {
       for (uint8_t i=0; i<w; i++ ) {
         if(color){
-          buff[(x+i)+((j+(y/8))*128)]|=(pgm_read_byte(bitmap + i + (j)*w)<<shift);
-          buff[(x+i)+((j+1+(y/8))*128)]|=(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
+          new_byte=(pgm_read_byte(bitmap + i + (j)*w)<<shift);
+          prev_byte=buff[(x+i)+((j+(y/8))*128)];
+          status=status|(new_byte&prev_byte);
+          buff[(x+i)+((j+(y/8))*128)]=prev_byte|new_byte;
+          //
+          new_byte=(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
+          prev_byte=buff[(x+i)+((j+1+(y/8))*128)];
+          status=status|(new_byte&prev_byte);
+          buff[(x+i)+((j+1+(y/8))*128)]=prev_byte|new_byte;
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)<<shift);
           buff[(x+i)+((j+1+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
@@ -123,6 +134,7 @@ void drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, ui
       }
     }
   }
+  return status;
 }
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
