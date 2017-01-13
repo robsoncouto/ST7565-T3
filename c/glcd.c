@@ -89,11 +89,13 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
   }
 }
 
-uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
+uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,const uint8_t *bitmap, uint8_t w, uint8_t h,uint8_t color) {
   uint8_t new_byte,status=0,prev_byte;
   if((y%8)==0){
     for (uint8_t j=0; j<(h/8); j++) {
+      if(y>LCDHEIGHT)break;
       for (uint8_t i=0; i<w; i++ ) {
+        if(x+i>=LCDWIDTH)break;
         if(color){
           new_byte=pgm_read_byte(bitmap + i + (j)*w);
           prev_byte=buff[(x+i)+((j+(y/8))*128)];
@@ -113,19 +115,24 @@ uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap,
   }else{
     uint8_t shift=y%8;
     for (uint8_t j=0; j<(h/8); j++) {
+      if(y>LCDHEIGHT)break;
       for (uint8_t i=0; i<w; i++ ) {
+        if(x+i>=LCDWIDTH)break;
         if(color){
           new_byte=(pgm_read_byte(bitmap + i + (j)*w)<<shift);
           prev_byte=buff[(x+i)+((j+(y/8))*128)];
           status=status|(new_byte&prev_byte);
           buff[(x+i)+((j+(y/8))*128)]=prev_byte|new_byte;
           //
+          if(y>(LCDHEIGHT-8))continue;
+
           new_byte=(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
           prev_byte=buff[(x+i)+((j+1+(y/8))*128)];
           status=status|(new_byte&prev_byte);
           buff[(x+i)+((j+1+(y/8))*128)]=prev_byte|new_byte;
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)<<shift);
+          if(y>(LCDHEIGHT-8))continue;
           buff[(x+i)+((j+1+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
 #ifdef CHECK_PAGES
            pages[j/8]=1;
