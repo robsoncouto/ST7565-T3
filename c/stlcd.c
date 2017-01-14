@@ -236,7 +236,7 @@ void write_part(uint8_t *buffer,uint8_t x, uint8_t y, uint8_t w,uint8_t h) {
   //uint8_t *pages =getPages();
 
   for(p = 0; p < 8; p++) {
-    if((p*8)>=y && (p*8)<(y+h)){
+    if((p)>=y/8 && (p*8)<(y+h)){ 
       st7565_command(CMD_SET_PAGE | p);
 
       st7565_command(CMD_SET_COLUMN_LOWER | (x&0x0f));
