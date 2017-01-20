@@ -29,7 +29,3 @@ void drawcircle(uint8_t *buff,
 void fillrect(uint8_t *buff,
 	      uint8_t x, uint8_t y, uint8_t w, uint8_t h,
 	      uint8_t color);
-#ifdef CHECK_PAGES
-void clearPages(void);
-#endif
-uint8_t* getPages(void);

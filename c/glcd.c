@@ -26,19 +26,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <avr/pgmspace.h>
 #include "glcd.h"
 
-//#define CHECK_PAGES
+
 
 extern uint8_t const PROGMEM font[];
-
-#ifdef CHECK_PAGES
-uint8_t pages[8];
-uint8_t* getPages(void){
-  return pages;
-}
-void clearPages(void){
-  memset(pages,0,8);
-}
-#endif
 
 // the most basic function, set a single pixel
 void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
@@ -47,14 +37,8 @@ void setpixel(uint8_t *buff, uint8_t x, uint8_t y, uint8_t color) {
   // x is which column
   if (color){
     buff[x+ (y/8)*128] |= _BV(y%8);
-#ifdef CHECK_PAGES
-    pages[y/8]=1;
-#endif
   }else{
     buff[x+ (y/8)*128] &= ~_BV(y%8);
-#ifdef CHECK_PAGES
-    pages[y/8]=1;
-#endif
   }
 }
 
@@ -64,14 +48,8 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if(color){
           buff[(x+i)+((j+(y/8))*128)]|=pgm_read_byte(bitmap + i + (j)*w);
-#ifdef CHECK_PAGES
-          pages[j+(y/8)]=1;
-#endif
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
-#ifdef CHECK_PAGES
-          pages[j+(y/8)]=1;
-#endif
         }
       }
     }
@@ -80,9 +58,6 @@ void drawbitmap(uint8_t *buff, uint8_t x, uint8_t y,		const uint8_t *bitmap, uin
       for (uint8_t i=0; i<w; i++ ) {
         if (pgm_read_byte(bitmap + i + (j/8)*w) & _BV(j%8)) {
   	       setpixel(buff, x+i, y+j, color);
-#ifdef CHECK_PAGES
-           pages[j/8]=1;
-#endif
         }
       }
     }
@@ -101,14 +76,8 @@ uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,const uint8_t *bitmap, u
           prev_byte=buff[(x+i)+((j+(y/8))*128)];
           status=status|(new_byte&prev_byte);
           buff[(x+i)+((j+(y/8))*128)]=prev_byte|new_byte;
-#ifdef CHECK_PAGES
-          pages[j+(y/8)]=1;
-#endif
         }else{
           buff[(x+i)+((j+(y/8))*128)]&=~pgm_read_byte(bitmap + i + (j)*w);
-#ifdef CHECK_PAGES
-          pages[j+(y/8)]=1;
-#endif
         }
       }
     }
@@ -134,9 +103,6 @@ uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,const uint8_t *bitmap, u
           buff[(x+i)+((j+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)<<shift);
           if(y>(LCDHEIGHT-8))continue;
           buff[(x+i)+((j+1+(y/8))*128)]&=~(pgm_read_byte(bitmap + i + (j)*w)>>(8-shift));
-#ifdef CHECK_PAGES
-           pages[j/8]=1;
-#endif
         }
       }
     }
@@ -145,9 +111,6 @@ uint8_t drawbitmap2(uint8_t *buff, uint8_t x, uint8_t y,const uint8_t *bitmap, u
 }
 
 void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
-#ifdef CHECK_PAGES
-  pages[line]=1;
-#endif
   while (c[0] != 0) {
     //uart_putchar(c[0]);
     drawchar(buff, x, line, c[0]);
@@ -156,9 +119,6 @@ void drawstring(uint8_t *buff, uint8_t x, uint8_t line, char *c) {
     if (x + 6 >= LCDWIDTH) {
       x = 0;    // ran out of this line
       line++;
-#ifdef CHECK_PAGES
-      pages[line]=1;
-#endif
     }
     if (line >= (LCDHEIGHT/8))
       return;        // ran out of space :(
@@ -336,8 +296,5 @@ void fillcircle(uint8_t *buff,
 // clear everything
 void clear_buffer(uint8_t *buff) {
   memset(buff, 0, 1024);
-  #ifdef CHECK_PAGES
-  memset(pages,0,8);
-  #endif
 
 }
