@@ -1,9 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
-//#include <stdlib.h>
 #include "stlcd.h"
 #include "glcd.h"
-//#include "util.h"
 #include "logo_glcd.h"
 
 uint8_t buffer[128*64/8] = {
@@ -155,5 +153,4 @@ void setup(void) {
     clear_buffer(buffer);
 
     testdrawbitmap(buffer, logo16_glcd_bmp, 16, 16);
-    //LED_PORT &= ~_BV(LED);
 }
